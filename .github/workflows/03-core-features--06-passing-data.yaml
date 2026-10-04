@@ -8,7 +8,7 @@ jobs:
 
     outputs:
       foo: ${{ steps.generate-foo.outputs.foo }}
-      big_foo: ${{steps.generate-FOO.outputs.FOO}}
+      big_foo: ${{steps.generate-big-FOO.outputs.FOO}}
     steps:
       - name: Generate and export foo
         id: generate-foo
@@ -22,7 +22,7 @@ jobs:
           echo "FOO=${foo}" >> "$GITHUB_ENV"
 
       - name: Inspect values inside producer
-        id: generate-FOO
+        id: generate-big-FOO
         run: |
           echo "FOO (set via GITHUB_ENV):   $FOO"
           echo "foo (step output):          ${{ steps.generate-foo.outputs.foo }}"
