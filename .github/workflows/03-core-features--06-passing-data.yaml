@@ -8,6 +8,7 @@ jobs:
 
     outputs:
       foo: ${{ steps.generate-foo.outputs.foo }}
+      big_foo: ${{steps.generate-FOO.outputs.FOO}}
     steps:
       - name: Generate and export foo
         id: generate-foo
@@ -21,9 +22,11 @@ jobs:
           echo "FOO=${foo}" >> "$GITHUB_ENV"
 
       - name: Inspect values inside producer
+        id: generate-FOO
         run: |
           echo "FOO (set via GITHUB_ENV):   $FOO"
           echo "foo (step output):          ${{ steps.generate-foo.outputs.foo }}"
+          echo "FOO=$FOO" >> "$GITHUB_OUTPUT"
 
   consumer:
     runs-on: ubuntu-24.04
@@ -33,3 +36,4 @@ jobs:
         run: |
           echo "Value from producer:        ${{ needs.producer.outputs.foo }}"
           echo "FOO in consumer:            ${FOO:-<UNSET>}"
+          echo "FOO from producer output: ${{ needs.producer.outputs.big_foo }}"
